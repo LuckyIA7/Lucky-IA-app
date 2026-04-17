@@ -73,4 +73,69 @@ if st.button("🚀 Gerar Conteúdo PRO") and produto:
     st.write(legenda)
 
     st.subheader("🔥 Hashtags")
-    st.write(tags)
+    st.write(tags) import streamlit as st
+from moviepy.editor import *
+from PIL import Image
+import tempfile
+import os
+
+st.set_page_config(page_title="Lucky IA 🎬", layout="centered")
+
+st.title("✨ Lucky IA - Criadora de Vídeos para Afiliados")
+
+produto = st.text_input("Qual produto vamos vender?")
+
+foto = st.file_uploader(
+    "📦 Envie a foto do produto",
+    type=["png", "jpg", "jpeg"]
+)
+
+if foto and produto:
+
+    st.success("Imagem carregada!")
+
+    # salvar imagem temporária
+    temp_img = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+    image = Image.open(foto)
+    image.save(temp_img.name)
+
+    st.image(image, caption="Produto selecionado")
+
+    if st.button("🔥 Criar Vídeo Automático"):
+
+        st.info("Lucky IA está criando seu vídeo...")
+
+        # cria animação zoom
+        clip = ImageClip(temp_img.name).set_duration(5)
+
+        clip = clip.resize(lambda t: 1 + 0.05*t)  # efeito zoom
+
+        texto = TextClip(
+            f"{produto}",
+            fontsize=70,
+            color="white",
+            font="Arial-Bold"
+        ).set_position("center").set_duration(5)
+
+        video = CompositeVideoClip([clip, texto])
+
+        output_path = os.path.join(tempfile.gettempdir(), "video_lucky.mp4")
+
+        video.write_videofile(
+            output_path,
+            fps=24,
+            codec="libx264",
+            audio=False
+        )
+
+        st.success("✅ Vídeo pronto!")
+
+        with open(output_path, "rb") as file:
+            st.download_button(
+                label="📲 Baixar Vídeo",
+                data=file,
+                file_name="video_lucky.mp4",
+                mime="video/mp4"
+)
+
+
