@@ -1,11 +1,9 @@
 import streamlit as st
+import random
 
 st.title("🤖 Lucky IA")
 
 produto = st.text_input("🛍️ Qual produto vamos vender?")
-
-if st.button("Criar roteiro"):
-    roteiro = import random
 
 roteiros = [
     f"Testei o {produto} e não achei que ia gostar tanto. Facilita MUITO o dia a dia!",
@@ -16,7 +14,5 @@ roteiros = [
 ]
 
 if st.button("Criar roteiro"):
-    st.write(random.choice(roteiros))
-
     st.write("🎬 Roteiro criado:")
-    st.write(roteiro)
+    st.write(random.choice(roteiros))
