@@ -1,90 +1,79 @@
 import streamlit as st
+from moviepy.editor import ImageClip
+from PIL import Image
+import tempfile
+import os
 
-# =============================
-# CONFIGURAÇÃO DA PÁGINA
-# =============================
-st.set_page_config(
-    page_title="Lucky IA",
-    page_icon="✨",
-    layout="wide"
+st.set_page_config(page_title="Lucky IA PRO", layout="centered")
+
+st.title("🚀 Lucky IA PRO")
+
+produto = st.text_input("📦 Qual produto vamos vender?")
+
+estilo = st.selectbox(
+    "🎬 Escolha o estilo do vídeo:",
+    ["TikTok Viral", "Review", "Oferta Relâmpago"]
 )
 
-# =============================
-# SIDEBAR
-# =============================
-st.sidebar.title("✨ Lucky IA")
-pagina = st.sidebar.radio(
-    "Escolha o módulo:",
-    [
-        "🏠 Dashboard",
-        "🎬 Roteiros",
-        "📦 Produtos",
-        "📅 Planejamento",
-        "⚙️ Configurações"
-    ]
+imagem = st.file_uploader(
+    "📸 Envie a foto do produto",
+    type=["png", "jpg", "jpeg"]
 )
 
-# =============================
-# DASHBOARD
-# =============================
-if pagina == "🏠 Dashboard":
+# -------- FUNÇÃO DE CRIAR VIDEO --------
+def criar_video(imagem_file):
 
-    st.title("✨ Lucky IA - Painel Central")
+    img = Image.open(imagem_file).convert("RGB")
 
-    col1, col2, col3 = st.columns(3)
+    # salva imagem temporária
+    temp_img = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+    img.save(temp_img.name)
 
-    with col1:
-        st.metric("Vídeos Postados", "12", "+3 hoje")
+    # cria clip
+    clip = ImageClip(temp_img.name)
 
-    with col2:
-        st.metric("Produtos Testados", "5")
+    # duração do vídeo
+    clip = clip.set_duration(5)
 
-    with col3:
-        st.metric("Vendas Estimadas", "R$ 420")
+    # tamanho vertical TikTok
+    clip = clip.resize(height=1920)
 
-    st.divider()
-
-    st.subheader("🔥 Missão do Dia")
-    st.write("""
-    ✅ Postar 3 vídeos  
-    ✅ Testar 1 produto novo  
-    ✅ Analisar comentários  
-    """)
-
-# =============================
-# ROTEIROS
-# =============================
-elif pagina == "🎬 Roteiros":
-
-    st.title("🎬 Gerador de Roteiros")
-
-    produto = st.text_input("Nome do produto")
-    nicho = st.selectbox(
-        "Escolha o nicho",
-        ["Beleza", "Casa", "Cozinha", "Tecnologia", "Fitness"]
+    # centraliza
+    clip = clip.on_color(
+        size=(1080,1920),
+        color=(0,0,0),
+        pos=("center","center")
     )
 
-    if st.button("Gerar Roteiro"):
+    # salva vídeo
+    video_path = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4").name
 
-        roteiro = f"""
-HOOK:
-"Eu não sabia que precisava disso até testar..."
+    clip.write_videofile(
+        video_path,
+        fps=24,
+        codec="libx264",
+        audio=False
+    )
 
-APRESENTAÇÃO:
-Hoje testei o {produto} do nicho {nicho}.
+    return video_path
 
-PROBLEMA:
-Todo mundo sofre com isso no dia a dia...
 
-SOLUÇÃO:
-Esse produto resolve rápido e sem esforço.
+# -------- BOTÃO --------
+if st.button("🚀 Gerar Conteúdo PRO"):
 
-CTA:
-Link no vídeo antes que acabe!
-"""
+    if imagem is None:
+        st.warning("Envie uma imagem primeiro.")
+    else:
+        st.success("Criando vídeo...")
 
-        st.success("Roteiro criado!")
-        st.text_area("Seu roteiro:", roteiro, height=300)
+        video = criar_video(imagem)
 
-# =============================
-# PROD
+        st.video(video)
+
+        with open(video, "rb") as file:
+            st.download_button(
+                label="⬇️ Baixar Vídeo",
+                data=file,
+                file_name="lucky_video.mp4",
+                mime="video/mp4"
+            )
