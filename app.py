@@ -1,64 +1,77 @@
 import streamlit as st
-from PIL import Image
-import os
-import moviepy.editor as mp
 from moviepy.editor import ImageClip
+import tempfile
+import os
 
+# CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title="Lucky IA PRO", layout="centered")
 
 st.title("🚀 Lucky IA PRO")
+st.write("Transforme fotos de produtos em vídeos prontos para Reels, TikTok e Shopee.")
 
-# Produto
-produto = st.text_input("📦 Qual produto vamos vender?")
+# INPUT DO PRODUTO
+produto = st.text_input("📦 Nome do produto")
 
-# Estilo
-estilo = st.selectbox(
-    "🎬 Escolha o estilo do vídeo:",
-    ["TikTok Viral", "Review", "Unboxing", "Estético"]
-)
-
-# Upload da foto
-foto = st.file_uploader(
+# UPLOAD DA IMAGEM
+imagem = st.file_uploader(
     "📸 Envie a foto do produto",
     type=["png", "jpg", "jpeg"]
 )
 
-# Gerar conteúdo
-if st.button("🚀 Gerar Conteúdo PRO"):
+# FUNÇÃO PARA CRIAR VÍDEO
+def criar_video(imagem_file):
 
-    if foto is not None:
+    temp_dir = tempfile.mkdtemp()
 
-        # salvar imagem
-        image = Image.open(foto)
-        image_path = "produto.jpg"
-        image.save(image_path)
+    caminho_imagem = os.path.join(temp_dir, "imagem.jpg")
 
-        st.success("Imagem recebida!")
+    with open(caminho_imagem, "wb") as f:
+        f.write(imagem_file.read())
 
-        # criar vídeo com zoom leve (efeito profissional)
-        clip = ImageClip(image_path, duration=6)
+    caminho_video = os.path.join(temp_dir, "video.mp4")
 
-        clip = clip.resize(lambda t: 1 + 0.04*t)
+    clip = ImageClip(caminho_imagem)
 
-        video_path = "video_lucky.mp4"
+    # duração do vídeo
+    clip = clip.set_duration(5)
 
-        clip.write_videofile(
-            video_path,
-            fps=24,
-            codec="libx264",
-            audio=False
-        )
+    # tamanho padrão vertical
+    clip = clip.resize(height=1920)
 
-        st.success("✅ Vídeo criado!")
+    # centralizar no formato 9:16
+    clip = clip.on_color(
+        size=(1080, 1920),
+        color=(0, 0, 0),
+        pos=("center", "center")
+    )
 
-        # botão download
-        with open(video_path, "rb") as file:
+    clip.write_videofile(
+        caminho_video,
+        fps=24,
+        codec="libx264",
+        audio=False
+    )
+
+    return caminho_video
+
+
+# BOTÃO GERAR VÍDEO
+if st.button("🎬 Criar Vídeo"):
+
+    if imagem is None:
+        st.warning("Envie uma imagem primeiro.")
+    else:
+        with st.spinner("Lucky IA criando seu vídeo..."):
+
+            video_path = criar_video(imagem)
+
+            st.success("✅ Vídeo criado!")
+
+            video_file = open(video_path, "rb")
+
             st.download_button(
-                label="⬇️ Baixar Vídeo",
-                data=file,
+                label="⬇️ Baixar vídeo",
+                data=video_file,
                 file_name="lucky_video.mp4",
                 mime="video/mp4"
             )
-
-    else:
-        st.warning("Envie uma foto primeiro.")
