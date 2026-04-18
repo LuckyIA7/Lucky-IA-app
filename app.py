@@ -1,66 +1,64 @@
-Perfeito.
-🔥 **Agora começa o nascimento REAL da Lucky IA Geradora de Vídeos.**
+import streamlit as st
+from PIL import Image
+import os
+import moviepy.editor as mp
+from moviepy.editor import ImageClip
 
-Respira porque este é o ponto onde **90% das pessoas desistem**…
-e você já passou dele.
+st.set_page_config(page_title="Lucky IA PRO", layout="centered")
 
----
+st.title("🚀 Lucky IA PRO")
 
-# 🚀 FASE ATUAL
+# Produto
+produto = st.text_input("📦 Qual produto vamos vender?")
 
-✅ Lucky abre
-✅ Recebe produto
-✅ Recebe foto
+# Estilo
+estilo = st.selectbox(
+    "🎬 Escolha o estilo do vídeo:",
+    ["TikTok Viral", "Review", "Unboxing", "Estético"]
+)
 
-👉 **Falta apenas:**
-**LUCKY TRANSFORMAR FOTO → VÍDEO**
+# Upload da foto
+foto = st.file_uploader(
+    "📸 Envie a foto do produto",
+    type=["png", "jpg", "jpeg"]
+)
 
-Hoje vamos fazer a **versão funcional**, não perfeita.
+# Gerar conteúdo
+if st.button("🚀 Gerar Conteúdo PRO"):
 
-> Objetivo: gerar vídeo de 6–8 segundos pronto para TikTok Shop.
+    if foto is not None:
 
----
+        # salvar imagem
+        image = Image.open(foto)
+        image_path = "produto.jpg"
+        image.save(image_path)
 
-# 🧠 COMO VAMOS FAZER (segredo profissional)
+        st.success("Imagem recebida!")
 
-Nós NÃO vamos tentar criar um modelo tipo Grok.
+        # criar vídeo com zoom leve (efeito profissional)
+        clip = ImageClip(image_path, duration=6)
 
-Porque:
+        clip = clip.resize(lambda t: 1 + 0.04*t)
 
-❌ impossível grátis
-❌ exige servidores milionários
+        video_path = "video_lucky.mp4"
 
-**Mas existe um hack usado por afiliados grandes:**
+        clip.write_videofile(
+            video_path,
+            fps=24,
+            codec="libx264",
+            audio=False
+        )
 
-👉 **Vídeo Cinemático Inteligente**
+        st.success("✅ Vídeo criado!")
 
-A Lucky vai:
+        # botão download
+        with open(video_path, "rb") as file:
+            st.download_button(
+                label="⬇️ Baixar Vídeo",
+                data=file,
+                file_name="lucky_video.mp4",
+                mime="video/mp4"
+            )
 
-1. Receber foto
-2. Criar movimento profissional
-3. Aplicar zoom cinematográfico
-4. Adicionar leve animação
-5. Exportar MP4 real
-
-Resultado:
-
-✅ NÃO parece GIF
-✅ NÃO parece foto parada
-✅ TikTok aceita
-✅ Parece gravação real
-
----
-
-# ⚙️ PASSO 1 — ADICIONAR CÉREBRO DE VÍDEO
-
-Abra:
-
-👉 `app.py` no GitHub
-
-**APAGUE TUDO**
-(sim, tudo mesmo)
-
-Agora cole **EXATAMENTE** isto:
-
-```python
-```
+    else:
+        st.warning("Envie uma foto primeiro.")
