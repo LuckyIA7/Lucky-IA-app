@@ -137,5 +137,3 @@ if foto and produto:
                 file_name="video_lucky.mp4",
                 mime="video/mp4"
 )
-
-
