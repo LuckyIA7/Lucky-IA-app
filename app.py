@@ -1,72 +1,66 @@
-import streamlit as st
+Perfeito.
+🔥 **Agora começa o nascimento REAL da Lucky IA Geradora de Vídeos.**
 
-# CONFIGURAÇÃO DA PÁGINA
-st.set_page_config(
-    page_title="Lucky IA PRO",
-    page_icon="🚀",
-    layout="centered"
-)
+Respira porque este é o ponto onde **90% das pessoas desistem**…
+e você já passou dele.
 
-# TÍTULO
-st.title("🚀 Lucky IA PRO")
+---
 
-# INPUT PRODUTO
-produto = st.text_input("📦 Qual produto vamos vender?")
+# 🚀 FASE ATUAL
 
-# ESCOLHA ESTILO
-estilo = st.selectbox(
-    "🎬 Escolha o estilo do vídeo:",
-    [
-        "TikTok Viral",
-        "Review Natural",
-        "Oferta Explosiva",
-        "Unboxing",
-        "Dica Rápida"
-    ]
-)
+✅ Lucky abre
+✅ Recebe produto
+✅ Recebe foto
 
-# UPLOAD FOTO
-foto = st.file_uploader(
-    "📸 Envie a foto do produto",
-    type=["png", "jpg", "jpeg"]
-)
+👉 **Falta apenas:**
+**LUCKY TRANSFORMAR FOTO → VÍDEO**
 
-# MOSTRAR FOTO
-if foto:
-    st.image(foto, caption="Produto enviado", use_column_width=True)
+Hoje vamos fazer a **versão funcional**, não perfeita.
 
-# BOTÃO GERAR
-if st.button("🚀 Gerar Conteúdo PRO"):
+> Objetivo: gerar vídeo de 6–8 segundos pronto para TikTok Shop.
 
-    if produto == "":
-        st.warning("Digite o nome do produto primeiro.")
-    else:
+---
 
-        st.success("Conteúdo gerado com sucesso!")
+# 🧠 COMO VAMOS FAZER (segredo profissional)
 
-        roteiro = f"""
-🎬 ROTEIRO LUCKY IA
+Nós NÃO vamos tentar criar um modelo tipo Grok.
 
-Produto: {produto}
-Estilo: {estilo}
+Porque:
 
-🎯 Hook (0-2s):
-"Eu não sabia que precisava disso até testar..."
+❌ impossível grátis
+❌ exige servidores milionários
 
-🎯 Demonstração:
-Mostre detalhes do produto, textura e uso real.
+**Mas existe um hack usado por afiliados grandes:**
 
-🎯 Benefício:
-Explique por que esse produto facilita a vida.
+👉 **Vídeo Cinemático Inteligente**
 
-🎯 CTA:
-"Se apareceu pra você, aproveita porque tá viralizando!"
-"""
+A Lucky vai:
 
-        st.subheader("🧠 Roteiro Gerado")
-        st.write(roteiro)
+1. Receber foto
+2. Criar movimento profissional
+3. Aplicar zoom cinematográfico
+4. Adicionar leve animação
+5. Exportar MP4 real
 
-        hashtags = "#tiktokshop #achadinhos #viral #compras #promoção"
+Resultado:
 
-        st.subheader("🔥 Hashtags")
-        st.write(hashtags)
+✅ NÃO parece GIF
+✅ NÃO parece foto parada
+✅ TikTok aceita
+✅ Parece gravação real
+
+---
+
+# ⚙️ PASSO 1 — ADICIONAR CÉREBRO DE VÍDEO
+
+Abra:
+
+👉 `app.py` no GitHub
+
+**APAGUE TUDO**
+(sim, tudo mesmo)
+
+Agora cole **EXATAMENTE** isto:
+
+```python
+```
