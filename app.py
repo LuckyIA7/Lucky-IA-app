@@ -80,6 +80,3 @@ if st.button("🚀 Gerar Conteúdo PRO"):
             file_name="video_lucky.mp4",
             mime="video/mp4"
         )
-
-    else:
-        st.warning("Envie uma imagem primeiro.")
