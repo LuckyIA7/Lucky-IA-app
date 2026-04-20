@@ -53,20 +53,33 @@ def criar_video(imagem):
 # BOTÃO
 if st.button("🚀 Gerar Conteúdo PRO"):
 
-    if foto:
+    # Verifica se a foto foi enviada
+    if foto is None:
+        st.warning("⚠️ Envie uma foto do produto primeiro!")
+        st.stop()
 
-        st.success("Imagem recebida!")
+    # Mostra a imagem carregada
+    st.image(
+        foto,
+        caption="✅ Produto carregado",
+        use_column_width=True
+    )
 
-        video_path = criar_video(foto)
+    st.info("🎬 Criando vídeo... aguarde")
 
-        st.video(video_path)
+    # Cria o vídeo
+    video_path = criar_video(foto)
 
-        with open(video_path, "rb") as file:
-            st.download_button(
-                "⬇️ Baixar Vídeo",
-                file,
-                file_name="lucky_video.mp4"
-            )
+    st.success("🎉 Vídeo criado com sucesso!")
+
+    # Botão para baixar o vídeo
+    with open(video_path, "rb") as video_file:
+        st.download_button(
+            label="📥 Baixar Vídeo",
+            data=video_file,
+            file_name="video_lucky.mp4",
+            mime="video/mp4"
+        )
 
     else:
         st.warning("Envie uma imagem primeiro.")
