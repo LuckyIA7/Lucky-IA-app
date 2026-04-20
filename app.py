@@ -2,78 +2,71 @@ import streamlit as st
 from moviepy.editor import ImageClip
 from PIL import Image
 import tempfile
-import os
 
 st.set_page_config(page_title="Lucky IA PRO", layout="centered")
 
 st.title("🚀 Lucky IA PRO")
 
+# PRODUTO
 produto = st.text_input("📦 Qual produto vamos vender?")
 
+# ESTILO
 estilo = st.selectbox(
     "🎬 Escolha o estilo do vídeo:",
-    ["TikTok Viral", "Review", "Oferta Relâmpago"]
+    ["TikTok Viral", "Review", "Oferta Rápida"]
 )
 
-imagem = st.file_uploader(
+# FOTO
+foto = st.file_uploader(
     "📸 Envie a foto do produto",
     type=["png", "jpg", "jpeg"]
 )
 
-# -------- FUNÇÃO DE CRIAR VIDEO --------
-def criar_video(imagem_file):
+# FUNÇÃO VIDEO
+def criar_video(imagem):
 
-    img = Image.open(imagem_file).convert("RGB")
+    img = Image.open(imagem).convert("RGB")
 
-    # salva imagem temporária
-    temp_img = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
-    img.save(temp_img.name)
+    # cria clip simples (SEM efeitos bugados)
+    clip = ImageClip(img).set_duration(5)
 
-    # cria clip
-    clip = ImageClip(temp_img.name)
-
-    # duração do vídeo
-    clip = clip.set_duration(5)
-
-    # tamanho vertical TikTok
+    # formato vertical 9:16
     clip = clip.resize(height=1920)
-
-    # centraliza
     clip = clip.on_color(
         size=(1080,1920),
         color=(0,0,0),
         pos=("center","center")
     )
 
-    # salva vídeo
-    video_path = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4").name
+    temp_video = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
 
     clip.write_videofile(
-        video_path,
+        temp_video.name,
         fps=24,
         codec="libx264",
         audio=False
     )
 
-    return video_path
+    return temp_video.name
 
 
-# -------- BOTÃO --------
+# BOTÃO
 if st.button("🚀 Gerar Conteúdo PRO"):
 
-    if imagem is None:
-        st.warning("Envie uma imagem primeiro.")
-    else:
-        st.success("Criando vídeo...")
+    if foto:
 
-        video = criar_video(imagem)
+        st.success("Imagem recebida!")
 
-        st.video(video)
+        video_path = criar_video(foto)
 
-        with open(video, "rb") as file:
+        st.video(video_path)
+
+        with open(video_path, "rb") as file:
             st.download_button(
-                label="⬇️ Baixar Vídeo",
-                data=file,
-                file_name="lucky_video.mp4",
-                mime="video/mp4"
+                "⬇️ Baixar Vídeo",
+                file,
+                file_name="lucky_video.mp4"
             )
+
+    else:
+        st.warning("Envie uma imagem primeiro.")
