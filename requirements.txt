@@ -1,5 +1,6 @@
 streamlit
-moviepy
-Pillow
+moviepy==1.0.3
 imageio
 imageio-ffmpeg
+Pillow
+numpy
