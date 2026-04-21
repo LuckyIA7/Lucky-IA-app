@@ -23,21 +23,29 @@ foto = st.file_uploader(
 )
 
 # FUNÇÃO VIDEO
-def criar_video(imagem):
+from moviepy.editor import ImageClip
+from PIL import Image
+import numpy as np
+import tempfile
 
-    img = Image.open(imagem).convert("RGB")
+def criar_video(foto):
 
-    # cria clip simples (SEM efeitos bugados)
-    clip = ImageClip(img).set_duration(5)
+    # abrir imagem corretamente
+    img = Image.open(foto)
 
-    # formato vertical 9:16
+    # converter para RGB (evita erro do Streamlit)
+    img = img.convert("RGB")
+
+    # transformar em array numpy
+    img_array = np.array(img)
+
+    # criar vídeo
+    clip = ImageClip(img_array).set_duration(5)
+
+    # tamanho vertical padrão reels
     clip = clip.resize(height=1920)
-    clip = clip.on_color(
-        size=(1080,1920),
-        color=(0,0,0),
-        pos=("center","center")
-    )
 
+    # salvar vídeo temporário
     temp_video = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
 
     clip.write_videofile(
