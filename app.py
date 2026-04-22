@@ -17,11 +17,7 @@ estilo = st.selectbox(
 )
 
 # FOTO
-foto = st.file_uploader(
-    "📸 Envie a foto do produto",
-    type=["png", "jpg", "jpeg"]
-)
-
+foto = st.file_uploader("Envie a imagem", type=["png", "jpg", "jpeg"])
 # FUNÇÃO VIDEO
 from moviepy.editor import ImageClip
 from PIL import Image
@@ -59,7 +55,12 @@ def criar_video(foto):
 
 
 # BOTÃO
-if st.button("🚀 Gerar Conteúdo PRO"):
+if foto is not None:
+
+    if st.button("Criar vídeo"):
+        video_path = criar_video(foto)
+        st.success("Vídeo criado!")
+        st.video(video_path)
 
     # Verifica se a foto foi enviada
     if foto is None:
@@ -76,10 +77,26 @@ if st.button("🚀 Gerar Conteúdo PRO"):
     st.info("🎬 Criando vídeo... aguarde")
 
     # Cria o vídeo
-    video_path = criar_video(foto)
+from moviepy.editor import ImageClip
+from PIL import Image
+import numpy as np
 
-    st.success("🎉 Vídeo criado com sucesso!")
+def criar_video(foto):
 
+    image = Image.open(foto)
+    image = image.convert("RGB")
+
+    img_array = np.array(image)
+
+    clip = ImageClip(img_array).set_duration(5)
+
+    clip = clip.resize(height=1920)
+
+    output = "video.mp4"
+
+    clip.write_videofile(output, fps=24)
+
+    return output
     # Botão para baixar o vídeo
     with open(video_path, "rb") as video_file:
         st.download_button(
