@@ -1,7 +1,6 @@
 streamlit
-moviepy==1.0.3
+moviepy
 imageio
 imageio-ffmpeg
-Pillow
 numpy
-# rebuild lucky ia
+Pillow
