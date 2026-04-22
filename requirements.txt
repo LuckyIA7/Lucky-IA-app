@@ -1,7 +1,6 @@
-ku6streamlit
+streamlit
 moviepy
 imageio
 imageio-ffmpeg
 numpy
 Pillow
- 
